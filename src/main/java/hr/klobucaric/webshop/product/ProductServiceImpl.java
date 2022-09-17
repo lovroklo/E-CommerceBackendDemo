@@ -1,7 +1,5 @@
 package hr.klobucaric.webshop.product;
 
-import hr.klobucaric.webshop.category.Category;
-import hr.klobucaric.webshop.category.CategoryDto;
 import hr.klobucaric.webshop.category.CategoryRepository;
 import hr.klobucaric.webshop.utils.exception.ApiBadRequestException;
 import hr.klobucaric.webshop.utils.exception.ApiNoContentException;
@@ -11,14 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @AllArgsConstructor
@@ -41,12 +35,28 @@ public class ProductServiceImpl implements ProductService {
         }
 
         try{
-            productDtoList = productRepository.findAllDto(PageRequest.of(p, n, Sort.by("name")));
+            productDtoList = productRepository.findProductDtoPage(PageRequest.of(p, n, Sort.by("name")));
         }catch (Exception e){
             throw new ApiBadRequestException("Something went wrong in Service layer while fetching all products" + e.getMessage());
         }
-        if(productDtoList.isEmpty()){
+        if(productDtoList.getContent().isEmpty()){
             throw new ApiNoContentException("Product component list is empty, there is nothing to return");
+        }
+        return productDtoList;
+    }
+
+    @Override
+    public  Page<ProductDto> findByCategoryId(Long id, Integer p, Integer n)  {
+        final Page<ProductDto> productDtoList;
+        try{
+            productDtoList = productRepository.findProductDtoPageByCategoryId(PageRequest.of(p, n, Sort.by("name")),id);
+        }catch (IllegalArgumentException e){
+          throw new ApiBadRequestException("Provided product category id is not in database! " +e.getMessage());
+        } catch (Exception e){
+            throw new ApiBadRequestException("Something went wrong in Service layer while fetching all products" + e.getMessage());
+        }
+        if(productDtoList.getContent().isEmpty()){
+            throw new ApiNotFoundException("There is no product found in database by selected parameters");
         }
         return productDtoList;
     }
@@ -54,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto findById(Long id) {
         try {
-            return productRepository.findByIdDto(id).get();
+            return productRepository.findOneProductDtoById(id).get();
         } catch (IllegalArgumentException e) {
             throw new ApiBadRequestException("Given product id is null, please send some id to be searched." + e.getMessage());
         } catch (NoSuchElementException e){
@@ -63,29 +73,6 @@ public class ProductServiceImpl implements ProductService {
             throw new ApiBadRequestException("Something went wrong in Service layer while fetching product by id. " + e.getMessage());
         }
     }
-
-
-
-
-    @Override
-    public  List<ProductDto> findByCategoryId(Long id) {
-        final List<ProductDto> productDtoList;
-        try{
-            String path = ""+id+".%";
-            String path2 = "%."+id+".%";
-            productDtoList = categoryRepository.findAllProductsByCategoryId(id,path, path2);
-            if(productDtoList.isEmpty()){
-                throw new ApiNoContentException(" - Product component list is empty, there is nothing to return");
-            }
-            return productDtoList;
-        }catch (IllegalArgumentException e){
-          throw new ApiBadRequestException("Provided product category name is not in database! " +e.getMessage());
-        } catch (Exception e){
-            throw new ApiBadRequestException("Something went wrong in Service layer while fetching all products" + e.getMessage());
-        }
-    }
-
-
     @Override
     public ProductDto save(final ProductCommand productCommand) {
         try {
@@ -115,9 +102,7 @@ public class ProductServiceImpl implements ProductService {
         }catch (Exception e){
             throw new ApiBadRequestException("Something went wrong in service layer while saving the product component." + e.getMessage());
         }
-
     }
-
 
     @Transactional
     @Override

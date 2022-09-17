@@ -3,7 +3,7 @@ package hr.klobucaric.webshop.product.productItem;
 import hr.klobucaric.webshop.orderLine.OrderLine;
 import hr.klobucaric.webshop.product.Product;
 import hr.klobucaric.webshop.shoppingCartItem.ShoppingCartItem;
-import hr.klobucaric.webshop.variation.variationOption.VariationOption;
+import hr.klobucaric.webshop.variationOption.VariationOption;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -48,8 +48,7 @@ public class ProductItem {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ProductItem)) return false;
-        ProductItem that = (ProductItem) o;
+        if (!(o instanceof ProductItem that)) return false;
         return Objects.equals(SKU, that.SKU);
     }
 

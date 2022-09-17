@@ -28,12 +28,14 @@ public class ProductItemServiceImpl implements ProductItemService{
         }
     }
 
+
     private void mapCommandToProduct(ProductItem productItem, final ProductItemCommand command) {
         productItem.setSKU(command.getSKU());
         productItem.setPrice(command.getPrice());
         productItem.setQtyInStock(command.getQtyInStock());
         productItem.setProductImage(command.getProductImage());
-        productItem.setProduct(productRepository.findById(command.getProductId()).orElseThrow(ApiNotFoundException::new));
+        productItem.setProduct(productRepository.findById(command.getProductId())
+                .orElseThrow(()-> new ApiNotFoundException("There is no product with id: "+command.getProductId())));
     }
 
     private ProductItemDto mapProductItemToDto(ProductItem productItem){

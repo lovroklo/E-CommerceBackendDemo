@@ -2,15 +2,14 @@ package hr.klobucaric.webshop.product;
 
 import org.springframework.data.domain.Page;
 
-import java.util.List;
 
 public interface ProductService {
 
     Page<ProductDto> findAllByPagination(final Integer p, final Integer n);
 
-    ProductDto findById(Long id);
+    Page<ProductDto> findByCategoryId(Long id, Integer p, Integer n) ;
 
-    List<ProductDto> findByCategoryId (Long id);
+    ProductDto findById(Long id);
 
     ProductDto save(ProductCommand productCommand);
 
