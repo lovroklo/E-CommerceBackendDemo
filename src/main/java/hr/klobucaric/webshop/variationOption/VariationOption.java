@@ -1,4 +1,4 @@
-package hr.klobucaric.webshop.variation.variationOption;
+package hr.klobucaric.webshop.variationOption;
 
 import hr.klobucaric.webshop.product.productItem.ProductItem;
 import hr.klobucaric.webshop.variation.Variation;
