@@ -9,13 +9,13 @@ import java.util.Set;
 public interface VariationOptionRepository extends JpaRepository<VariationOption, Long> {
 
     @Query("""
-      select new hr.klobucaric.webshop.variationOption.VariationOptionDto(v.id, v.variation.id, v.value) from VariationOption v
-      where v.variation.id = :v
+      select new hr.klobucaric.webshop.variationOption.VariationOptionDto(v.id, v.id, v.value) from VariationOption v
+      where v.variation.id = :id
     """)
     Set<VariationOptionDto> findVariationDtoSetByVariationId(Long id);
 
     @Query("""
-      select new hr.klobucaric.webshop.variationOption.VariationOptionDto(v.id,v.variation.id ,v.value) from VariationOption v
+      select new hr.klobucaric.webshop.variationOption.VariationOptionDto(v.id, v.variation.id , v.value) from VariationOption v
       where v.id = :id
     """)
     VariationOptionDto findDtoById(Long id);
