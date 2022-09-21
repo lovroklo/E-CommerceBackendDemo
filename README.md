@@ -30,5 +30,5 @@ The idea is to also have different payment methods and payment types (still in e
 
 
 <h3>Current database design</h3>
-![image](https://user-images.githubusercontent.com/48119103/191620289-864a30c2-0364-4186-8651-fa65064d3d19.png)
+![image](https://user-images.githubusercontent.com/48119103/191621110-260f88a6-d637-4b60-8be3-a37694bbb526.png)
 
