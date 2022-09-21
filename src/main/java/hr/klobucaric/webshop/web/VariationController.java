@@ -16,18 +16,18 @@ import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/variation")
+@RequestMapping("/api/variations")
 public class VariationController {
 
     private final VariationService variationService;
     private final VariationOptionService variationOptionService;
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<VariationDto> getVariationById(@PathVariable final Long id) {
         return new ResponseEntity<>(variationService.findVariationById(id), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/ctg/{id}")
+    @GetMapping(value = "/categories/{id}")
     public ResponseEntity<Set<VariationDto>> getAllVariationsByCategoryId(@PathVariable final Long id) {
         return new ResponseEntity<>(variationService.findVariationsByCategoryId(id), HttpStatus.OK);
     }

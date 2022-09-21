@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity
@@ -20,11 +21,16 @@ public class ShoppingCart {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    public ShoppingCart(User user) {
+        this.user = user;
+    }
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "shoppingCart")
     private Set<ShoppingCartItem> shoppingCartItems;
+
 
 }

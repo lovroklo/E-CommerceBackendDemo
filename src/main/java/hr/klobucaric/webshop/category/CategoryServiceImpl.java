@@ -44,10 +44,9 @@ public class CategoryServiceImpl implements CategoryService{
         }
     }
 
-    //todo only superAdmin can delete level 0 category (with no parents)
+    //todo category level 0 can be deleted only if there are no products in it
     //todo implement deleting subcategories, products then move to higher category
 
-    //Not the most optimized solution, this function will not be used often anyway
     @Transactional
     @Override
     public CategoryDto save(CategoryCommand command) {
@@ -65,9 +64,8 @@ public class CategoryServiceImpl implements CategoryService{
                 category = new Category(command.getName(), parentCategory);
             }
             category.setPath("");
-            category = categoryRepository.save(category);
-            String path="";
             Category tempCategory = category;
+            String path="";
             while (true){
                 StringBuffer tempId = new StringBuffer(tempCategory.getId().toString());
                 if(tempCategory.getParentCategory()!=null) {
@@ -82,7 +80,7 @@ public class CategoryServiceImpl implements CategoryService{
             StringBuffer sbr = new StringBuffer(path);
             path = sbr.reverse().toString();
             category.setPath(path);
-            return mapCategoryToDto(category);
+            return mapCategoryToDto(categoryRepository.save(category));
         }catch (IllegalArgumentException e) {
             throw new ApiBadRequestException("Given category is null." + e.getMessage());
         }catch (Exception e){

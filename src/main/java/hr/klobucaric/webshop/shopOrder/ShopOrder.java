@@ -2,12 +2,10 @@ package hr.klobucaric.webshop.shopOrder;
 
 import hr.klobucaric.webshop.address.Address;
 import hr.klobucaric.webshop.orderLine.OrderLine;
-import hr.klobucaric.webshop.orderStatus.OrderStatus;
 import hr.klobucaric.webshop.paymentMethod.PaymentMethod;
-import hr.klobucaric.webshop.paymentType.PaymentType;
 import hr.klobucaric.webshop.shippingMethod.ShippingMethod;
 import hr.klobucaric.webshop.user.User;
-import lombok.Data;
+import hr.klobucaric.webshop.utils.enums.OrderStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,23 +36,23 @@ public class ShopOrder implements Serializable {
     private Date orderDate;
     private BigDecimal orderTotal;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shipping_address")
     private Address shippingAddress;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shipping_method")
     private ShippingMethod shippingMethod;
 
-    @ManyToOne
-    @JoinColumn(name = "order_status")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_status")
     private OrderStatus orderStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_method_id")
     private PaymentMethod paymentMethod;
 

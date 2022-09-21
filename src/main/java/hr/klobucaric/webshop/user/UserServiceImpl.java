@@ -1,12 +1,14 @@
 package hr.klobucaric.webshop.user;
 
-import hr.klobucaric.webshop.role.Role;
 import hr.klobucaric.webshop.role.RoleRepository;
 import hr.klobucaric.webshop.security.JwtUtils;
 import hr.klobucaric.webshop.security.SecurityUser;
+import hr.klobucaric.webshop.shoppingCart.ShoppingCart;
+import hr.klobucaric.webshop.shoppingCart.ShoppingCartRepository;
 import hr.klobucaric.webshop.utils.exception.ApiBadRequestException;
 import hr.klobucaric.webshop.utils.exception.UserAlreadyExistException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,15 +18,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final AuthenticationManager authenticationManager;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ShoppingCartRepository shoppingCartRepository;
 
     @Override
     public UserDto register(RegistrationCommand command) throws UserAlreadyExistException {
@@ -40,9 +42,11 @@ public class UserServiceImpl implements UserService {
         }
         User user = mapCommandToUser(command);
         encodePassword(user);
-        //todo getRoles.add()
         user.setRoles(Stream.of(roleRepository.findByName("ROLE_USER")).collect(Collectors.toCollection(HashSet::new)));
-        return mapUserToUserDto(userRepository.save(user));
+        log.info("Saving user and shopping cart to database! User: "+ user.getEmail());
+        user=userRepository.save(user);
+        shoppingCartRepository.save(new ShoppingCart(user));
+        return mapUserToUserDto(user);
     }
 
     @Override
@@ -52,6 +56,7 @@ public class UserServiceImpl implements UserService {
                     .authenticate(new UsernamePasswordAuthenticationToken(command.getEmail(), command.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             ResponseCookie jwtCookie = jwtUtils.generateJwtCookie((SecurityUser) authentication.getPrincipal());
+            log.info("Authenticating user and returning jwtCookie with token: " +jwtCookie.getDomain());
             return jwtCookie;
         }catch (BadCredentialsException e){
             throw new ApiBadRequestException("Bad credentials, send correct ones!");

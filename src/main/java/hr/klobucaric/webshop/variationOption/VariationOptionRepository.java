@@ -1,6 +1,5 @@
 package hr.klobucaric.webshop.variationOption;
 
-import hr.klobucaric.webshop.variation.VariationDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -20,4 +19,5 @@ public interface VariationOptionRepository extends JpaRepository<VariationOption
     """)
     VariationOptionDto findDtoById(Long id);
 
+    Set<VariationOption> findAllByIdIn(Set<Long> id);
 }

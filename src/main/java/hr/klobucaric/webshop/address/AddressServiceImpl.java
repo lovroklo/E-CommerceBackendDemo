@@ -29,19 +29,15 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public AddressDto createAddress(AddressCommand addressCommand) {
         User currentUser = getCurrentUser();
-        Optional<Address> existingAddress = addressExists(addressCommand);
+        Long  existingAddressId = addressExists(addressCommand);
         Boolean isDefault = false;
-        Boolean userContainsExistingAddress = existingAddress.isPresent() ?
-                currentUser.getUserAddresses().stream()
-                        .filter(userAddress -> userAddress.getAddress().getId().equals(existingAddress.get().getId()))
-                        .findFirst().isPresent() : false;
+        Boolean userContainsExistingAddress = existingAddressId!=null ?
+                addressRepository.userContainsAddress(currentUser.getId(), existingAddressId) : false;
         if(userContainsExistingAddress){
-            throw new ApiBadRequestException("Logged in user already contains this address!");
-        } else if(!currentUser.getUserAddresses().isEmpty() || addressCommand.getIsDefault()){
+            throw new ApiBadRequestException("Logged in user already has this address!");
+        } else if(currentUser.getUserAddresses().isEmpty() || addressCommand.getIsDefault()){
             isDefault=true;
-            currentUser.getUserAddresses().stream()
-                    .filter(userAddress -> userAddress.getIsDefault().equals(true))
-                    .findFirst().ifPresent(userAddress -> userAddress.setIsDefault(false));
+            addressRepository.removeDefaultAddress(currentUser.getId());
         }
         Address address = mapCommandToAddress(addressCommand);
         address.addUserAddress(currentUser, isDefault);
@@ -49,22 +45,18 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void setDefaultAddress(Integer id) {
-        User currentUser = getCurrentUser();
-        Optional<Address> existingAddress = addressRepository.findById(id);
-            AtomicReference<Boolean> isPresent = new AtomicReference<>(false);
-        if(existingAddress.isPresent()){
-            currentUser.getUserAddresses().stream()
-                    .filter(userAddress -> userAddress.getAddress().getId().equals(existingAddress.get().getId()))
-                    .findFirst().ifPresent(userAddress ->  {
-                        userAddress.setIsDefault(true);
-                        isPresent.set(true);
-                    });
-        }else {
-            throw new ApiNotFoundException("There is no address with provided id");
+    public void setDefaultAddress(Long id) {
+        if(!addressRepository.addressExists(id)){
+            throw new ApiNotFoundException("There is no address in database with id: "+ id);
         }
-        if(isPresent.get().equals(false))
-            throw new ApiBadRequestException("User does not contain provided address id!");
+        User currentUser = getCurrentUser();
+
+        if(addressRepository.userContainsAddressAndIsDefaultIsFalse(currentUser.getId(), id)){
+            addressRepository.removeDefaultAddress(currentUser.getId());
+            addressRepository.setDefaultAddress(currentUser.getId(), id);
+        }else{
+            throw new ApiBadRequestException("User does not contain provided address id or its already default!");
+        }
     }
 
     private Address mapCommandToAddress(AddressCommand command){
@@ -76,10 +68,12 @@ public class AddressServiceImpl implements AddressService {
     }
 
     private User getCurrentUser(){
-       return userRepository.findByEmail(securityUtils.getAuthenticatedUser().getName()).get();
+       return userRepository.findByEmail(securityUtils.getAuthenticatedUser().getName()).orElseThrow(
+               () -> new ApiBadRequestException("Current user is not found in database")
+       );
     }
-    private Optional<Address> addressExists(AddressCommand command){
-        return addressRepository.findByCityAndPostalCodeAndAddressLineAndStreetNumber(
+    private Long addressExists(AddressCommand command){
+        return addressRepository.findExistingAddress(
                 command.getCity(),command.getPostalCode(),command.getAddressLine(),command.getStreetNumber()
         );
     }

@@ -1,6 +1,5 @@
 package hr.klobucaric.webshop.user;
 
-import hr.klobucaric.webshop.address.Address;
 import hr.klobucaric.webshop.address.UserAddress;
 import hr.klobucaric.webshop.paymentMethod.PaymentMethod;
 import hr.klobucaric.webshop.role.Role;
@@ -20,7 +19,6 @@ import java.util.Set;
 @Table(name = "site_user")
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
@@ -28,7 +26,7 @@ public class User  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(unique = true,
     name = "email_address")
@@ -68,13 +66,15 @@ public class User  {
         this.password = password;
     }
 
-
-
-    @PrePersist
-    @PreUpdate
-    public void myLogging(){
-        log.info("Object sent to DB: " + this.toString());
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
+
 
     @Override
     public boolean equals(Object o) {

@@ -25,13 +25,12 @@ public class PaymentMethod {
     private String provider;
     private String accountNumber;
     private Date expiryDate;
-    private Boolean isDefault;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_type_id")
     private PaymentType paymentType;
 

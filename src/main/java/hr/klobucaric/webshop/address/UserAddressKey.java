@@ -19,17 +19,15 @@ import java.util.Objects;
 class UserAddressKey implements Serializable {
 
     @Column(name = "user_id")
-    Integer userId;
+    Long userId;
 
     @Column(name = "address_id")
-    Integer addressId;
+    Long addressId;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UserAddressKey)) return false;
-
-        UserAddressKey that = (UserAddressKey) o;
+        if (!(o instanceof UserAddressKey that)) return false;
 
         if (!Objects.equals(userId, that.userId)) return false;
         return Objects.equals(addressId, that.addressId);

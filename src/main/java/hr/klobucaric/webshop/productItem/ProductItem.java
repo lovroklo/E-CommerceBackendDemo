@@ -1,4 +1,4 @@
-package hr.klobucaric.webshop.product.productItem;
+package hr.klobucaric.webshop.productItem;
 
 import hr.klobucaric.webshop.orderLine.OrderLine;
 import hr.klobucaric.webshop.product.Product;
@@ -25,17 +25,19 @@ public class ProductItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+    @Column(unique = true)
     private String SKU;
     private Integer qtyInStock;
     private String productImage;
     private BigDecimal price;
+    private String prodConfStr;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "product_configuration", joinColumns = @JoinColumn(name = "product_item_id"),
     inverseJoinColumns = @JoinColumn(name = "variation_option_id"))
     Set<VariationOption> variationOptions;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 

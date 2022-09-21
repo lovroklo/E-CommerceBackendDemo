@@ -62,7 +62,6 @@ public class VariationServiceImpl implements VariationService {
         }
     }
 
-    //todo delete i update
 
     private VariationDto mapVariationToDto(Variation variation){
         return new VariationDto(variation.getId(), variation.getName());

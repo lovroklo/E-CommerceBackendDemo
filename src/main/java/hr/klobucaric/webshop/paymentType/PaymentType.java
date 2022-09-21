@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,6 +22,8 @@ public class PaymentType {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @NotBlank(message = "Type can't be blank!")
+    @Column(name = "value", unique = true, nullable = false)
     private String value;
 
     @OneToMany(cascade = CascadeType.ALL,  mappedBy = "paymentType")

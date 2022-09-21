@@ -25,7 +25,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<ProductDto> findAllByPagination(Integer p, Integer n) {
         Page<ProductDto> productDtoList;
-
         switch (n){
             case 12:
             case 24:
@@ -33,12 +32,7 @@ public class ProductServiceImpl implements ProductService {
                 break;
             default: n=12;
         }
-
-        try{
-            productDtoList = productRepository.findProductDtoPage(PageRequest.of(p, n, Sort.by("name")));
-        }catch (Exception e){
-            throw new ApiBadRequestException("Something went wrong in Service layer while fetching all products" + e.getMessage());
-        }
+        productDtoList = productRepository.findProductDtoPage(PageRequest.of(p, n, Sort.by("name")));
         if(productDtoList.getContent().isEmpty()){
             throw new ApiNoContentException("Product component list is empty, there is nothing to return");
         }
@@ -48,15 +42,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public  Page<ProductDto> findByCategoryId(Long id, Integer p, Integer n)  {
         final Page<ProductDto> productDtoList;
-        try{
-            productDtoList = productRepository.findProductDtoPageByCategoryId(PageRequest.of(p, n, Sort.by("name")),id);
-        }catch (IllegalArgumentException e){
-          throw new ApiBadRequestException("Provided product category id is not in database! " +e.getMessage());
-        } catch (Exception e){
-            throw new ApiBadRequestException("Something went wrong in Service layer while fetching all products" + e.getMessage());
-        }
+        productDtoList = productRepository.findProductDtoPageByCategoryId(PageRequest.of(p, n, Sort.by("name")),id);
         if(productDtoList.getContent().isEmpty()){
-            throw new ApiNotFoundException("There is no product found in database by selected parameters");
+           throw new ApiNotFoundException("There is no product found in database by selected parameters");
         }
         return productDtoList;
     }
@@ -64,70 +52,59 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto findById(Long id) {
         try {
-            return productRepository.findOneProductDtoById(id).get();
+            return productRepository.findOneProductDtoById(id).orElseThrow(
+                    () -> new ApiNotFoundException("Product component with id="+id+" does not exist in database!")
+            );
         } catch (IllegalArgumentException e) {
             throw new ApiBadRequestException("Given product id is null, please send some id to be searched." + e.getMessage());
-        } catch (NoSuchElementException e){
-            throw new ApiNotFoundException("Product component with id="+id+" does not exist in database. " + e.getMessage());
-        } catch (Exception e){
-            throw new ApiBadRequestException("Something went wrong in Service layer while fetching product by id. " + e.getMessage());
         }
     }
+
     @Override
     public ProductDto save(final ProductCommand productCommand) {
-        try {
-            Product product = new Product();
-            mapCommandToProduct(product,productCommand);
-            product.setCategory(categoryRepository.findById(productCommand.getCategoryId()).orElseThrow(ApiNotFoundException::new));
-            return mapProductToDTO(productRepository.save(product));
-        }catch (IllegalArgumentException e) {
-            throw new ApiBadRequestException("Given product is null." + e.getMessage());
-        }catch (Exception e){
-            throw new ApiBadRequestException("Something went wrong in service layer while saving the product." + e.getMessage());
-        }
+        Product product = mapCommandToProduct(productCommand);
+        product.setCategory(categoryRepository.findById(productCommand.getCategoryId()).orElseThrow(
+                () -> new ApiNotFoundException("There is no category in database with id=" + productCommand.getCategoryId())
+        ));
+        return mapProductToDTO(productRepository.save(product));
     }
 
     @Transactional
     @Override
-    public ProductDto update(Long id, ProductCommand updatedProductCommand) {
-        Optional<Product> product = productRepository.findById(id);
-        if(product.isEmpty()){
-            throw new ApiNotFoundException("There is no product by given id which is " + id);
-        }
-        try{
-            mapCommandToProduct(product.get(),updatedProductCommand);
-            return mapProductToDTO(product.get());
-        }catch (IllegalArgumentException e) {
-            throw new ApiBadRequestException("Given product is null." + e.getMessage());
-        }catch (Exception e){
-            throw new ApiBadRequestException("Something went wrong in service layer while saving the product component." + e.getMessage());
-        }
+    public ProductDto update(Long id, ProductCommand command) {
+        Product product = productRepository.findById(id).orElseThrow(
+                () -> new ApiNotFoundException("There is no product with id "+ id + " in database")
+        );
+        product.setCategory(categoryRepository.findById(command.getCategoryId()).orElseThrow(
+                () -> new ApiNotFoundException("There is no category in database with id=" + command.getCategoryId())
+        ));
+        product.setName(command.getName());
+        product.setDescription(command.getDescription());
+        product.setProductImage(command.getProductImage());
+        return mapProductToDTO(product);
     }
 
     @Transactional
     @Override
     public void deleteById(Long id) {
-        try {
-            Long numberOfDeletedProducts = productRepository.deleteProductById(id);
-            if(numberOfDeletedProducts<1)
-                throw new ApiNotFoundException("There is no product by given id which is " + id);
-        }catch (IllegalArgumentException e){
-            throw new ApiBadRequestException("Given product id is null, please send correct id. " + e.getMessage());
-        }catch (Exception e){
-            throw new ApiBadRequestException("Something went wrong in service layer while deleting by id. " + e.getMessage());
-        }
+        Long numberOfDeletedProducts = productRepository.deleteProductById(id);
+        if(numberOfDeletedProducts<1)
+            throw new ApiNotFoundException("There is no product by given id which is " + id);
     }
 
-    private void mapCommandToProduct(Product product, final ProductCommand productCommand) {
+    private Product mapCommandToProduct(final ProductCommand productCommand) {
+        Product product = new Product();
         product.setName(productCommand.getName());
         product.setDescription(productCommand.getDescription());
         product.setProductImage(productCommand.getProductImage());
-
+        return product;
     }
+
 
     private ProductDto mapProductToDTO(final Product product){
         return new ProductDto(product.getId(),product.getName(),
-                product.getDescription(), product.getProductImage());
+                product.getDescription(), product.getProductImage(),
+                product.getCategory().getPath());
     }
 
 

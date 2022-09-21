@@ -24,5 +24,12 @@ public class AddressCommand {
     @Positive(message = "Street number must be a positive number")
     private Integer streetNumber;
 
-    private Boolean isDefault = false;
+
+    private Boolean isDefault;
+
+    public Boolean getIsDefault(){
+        if(this.isDefault==null)
+            return false;
+        else return this.isDefault;
+    }
 }

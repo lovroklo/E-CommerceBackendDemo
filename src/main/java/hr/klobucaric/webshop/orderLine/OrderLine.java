@@ -1,6 +1,6 @@
 package hr.klobucaric.webshop.orderLine;
 
-import hr.klobucaric.webshop.product.productItem.ProductItem;
+import hr.klobucaric.webshop.productItem.ProductItem;
 import hr.klobucaric.webshop.shopOrder.ShopOrder;
 import hr.klobucaric.webshop.userReview.UserReview;
 import lombok.Getter;
@@ -24,13 +24,14 @@ public class OrderLine {
     private Long id;
 
     private Integer qty;
+
     private BigDecimal price;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_item_id")
     private ProductItem productItem;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private ShopOrder shopOrder;
 
