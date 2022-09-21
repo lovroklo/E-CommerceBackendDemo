@@ -2,8 +2,6 @@ package hr.klobucaric.webshop.product;
 
 import org.springframework.data.domain.Page;
 
-import java.util.Optional;
-
 
 public interface ProductService {
 

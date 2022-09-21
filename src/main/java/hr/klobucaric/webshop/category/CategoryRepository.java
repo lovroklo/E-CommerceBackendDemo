@@ -1,6 +1,4 @@
 package hr.klobucaric.webshop.category;
-import hr.klobucaric.webshop.variation.Variation;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
