@@ -1,15 +1,15 @@
 ## E-CommerceBackendDemo
 
-######SPRING BOOT REST APPLICATION
+<h2>SPRING BOOT REST APPLICATION</h2>
 
-######Introduction
+<h3>Introduction</h3>
 E-CommerceBackendDemo is an e-commerce framework written in Java and leveraging the Spring framework. 
 It's targeting the development commerce-driven websites.
 As a student, my main reason for developing this project is to learn Java and Spring Boot frameworks.
 
-######Project is still in the early stage of development so many features are not finished and/or will be changed
+<h3>Project is still in the early stage of development so many features are not finished and/or will be changed</h3>
 
-######FEATURES
+<h3>FEATURES</h3>
 
 User authentication and authorization are made with JWT token which is passed to a cookie on the website. 
 The plan is to add an implementation of OAuth 2.0 authentication.
@@ -29,6 +29,6 @@ An address is used when a user is ordering products.
 The idea is to also have different payment methods and payment types (still in early implementation)
 
 
-##Current database design
+<h3>Current database design</h3>
 ![image](https://user-images.githubusercontent.com/48119103/191620289-864a30c2-0364-4186-8651-fa65064d3d19.png)
 
