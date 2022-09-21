@@ -5,7 +5,8 @@
 <h3>Introduction</h3>
 E-CommerceBackendDemo is an e-commerce framework written in Java and leveraging the Spring framework. 
 It's targeting the development commerce-driven websites.
-As a student, my main reason for developing this project is to learn Java and Spring Boot frameworks.
+
+<h5>Main reason for developing this project is learning the Spring Boot framework.</5>
 
 <h3>Project is still in the early stages of development so many features are not finished and/or will be changed</h3>
 
