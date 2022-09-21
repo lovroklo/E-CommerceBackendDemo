@@ -7,7 +7,7 @@ E-CommerceBackendDemo is an e-commerce framework written in Java and leveraging 
 It's targeting the development commerce-driven websites.
 As a student, my main reason for developing this project is to learn Java and Spring Boot frameworks.
 
-<h3>Project is still in the early stage of development so many features are not finished and/or will be changed</h3>
+<h3>Project is still in the early stages of development so many features are not finished and/or will be changed</h3>
 
 <h3>FEATURES</h3>
 
@@ -30,5 +30,6 @@ The idea is to also have different payment methods and payment types (still in e
 
 
 <h3>Current database design</h3>
-![image](https://user-images.githubusercontent.com/48119103/191621110-260f88a6-d637-4b60-8be3-a37694bbb526.png)
+
+![ScreenShot](https://user-images.githubusercontent.com/48119103/191621110-260f88a6-d637-4b60-8be3-a37694bbb526.png)
 
