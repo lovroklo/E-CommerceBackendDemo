@@ -8,7 +8,7 @@ It's targeting the development commerce-driven websites.
 
 <h5>Main reason for developing this project is learning the Spring Boot framework.</5>
 
-<h3>Project is still in the early stages of development so many features are not finished and/or will be changed</h3>
+<h3>The project is still in the early stages of development so many features are not finished and/or will be changed</h3>
 
 <h3>FEATURES</h3>
 
