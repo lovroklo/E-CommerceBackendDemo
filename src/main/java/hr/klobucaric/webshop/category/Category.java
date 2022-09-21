@@ -27,13 +27,13 @@ public class Category {
 
     private String path;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_category_id")
     private Category parentCategory;
 
     @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL)
     private Set<Category> childCategories = new HashSet<>();
-    //todo dok brišem kategoriju, omogućiti da se proizvod pomakne u neku višu kategoriju, osnovne kategorije se nebreju obrisati i more ih napraviti samo super admin!
+    //todo when deleting category automatically add product to closest parent category
     @OneToMany(mappedBy = "category")
     Set<Product> products = new HashSet<>();
 

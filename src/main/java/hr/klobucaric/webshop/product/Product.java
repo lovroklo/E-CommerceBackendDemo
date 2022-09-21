@@ -1,7 +1,7 @@
 package hr.klobucaric.webshop.product;
 
 import hr.klobucaric.webshop.category.Category;
-import hr.klobucaric.webshop.product.productItem.ProductItem;
+import hr.klobucaric.webshop.productItem.ProductItem;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,27 +25,20 @@ public class Product {
     private String description;
     private String productImage;
 
-    @ManyToOne
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<ProductItem> productItems = new HashSet<>();;
+    private Set<ProductItem> productItems = new HashSet<>();
 
     public Product(String name, String description, String productImage) {
         this.name = name;
         this.description = description;
         this.productImage = productImage;
     }
-
-   /* @Transient
-    public BigDecimal getAverageGrade() {
-        List<Review> reviewList = getReviews();
-        if (reviewList.isEmpty())
-            return null;
-        return new BigDecimal(reviewList.stream().map(review -> review.getReviewGrade()).mapToInt(Integer::intValue).average().getAsDouble());
-    }
-*/
 
     @Override
     public boolean equals(Object o) {

@@ -1,19 +1,23 @@
 package hr.klobucaric.webshop.utils.exception;
 
-import hr.klobucaric.webshop.utils.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 @ControllerAdvice
-public class ApiExceptionHandler {
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {ApiBadRequestException.class})
-    public ResponseEntity<Object> handleApiRequestException(ApiBadRequestException e){
+    public ResponseEntity<Object> handleApiRequestException(ApiBadRequestException e) {
         ApiException apiException = new ApiException(
                 e.getMessage(),
                 e,
@@ -24,7 +28,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(value = {ApiNotFoundException.class})
-    public ResponseEntity<Object> handleApiNotFoundException(ApiNotFoundException e){
+    public ResponseEntity<Object> handleApiNotFoundException(ApiNotFoundException e) {
         ApiException apiException = new ApiException(
                 e.getMessage(),
                 e,
@@ -35,7 +39,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(value = {ApiNoContentException.class})
-    public ResponseEntity<Object> handleApiNoContentException(ApiNoContentException e){
+    public ResponseEntity<Object> handleApiNoContentException(ApiNoContentException e) {
         ApiException apiException = new ApiException(
                 e.getMessage(),
                 e,
@@ -47,7 +51,7 @@ public class ApiExceptionHandler {
 
 
     @ExceptionHandler(value = {ApiForbiddenException.class})
-    public ResponseEntity<Object> handleApiForbiddenException(ApiForbiddenException e){
+    public ResponseEntity<Object> handleApiForbiddenException(ApiForbiddenException e) {
 
         ApiException apiException = new ApiException(
                 e.getMessage(),
@@ -57,9 +61,10 @@ public class ApiExceptionHandler {
         );
         return new ResponseEntity<>(apiException, HttpStatus.FORBIDDEN);
     }
-    //TODO https://auth0.com/blog/get-started-with-custom-error-handling-in-spring-boot-java/ -implementirati
+
+    //TODO https://auth0.com/blog/get-started-with-custom-error-handling-in-spring-boot-java/ -implement
     @ExceptionHandler(value = {UserAlreadyExistException.class})
-    public ResponseEntity<Object> handleUserAlreadyExistException(UserAlreadyExistException e){
+    public ResponseEntity<Object> handleUserAlreadyExistException(UserAlreadyExistException e) {
 
         ApiException apiException = new ApiException(
                 e.getMessage(),
@@ -69,5 +74,6 @@ public class ApiExceptionHandler {
         );
         return new ResponseEntity<>(apiException, HttpStatus.CONFLICT);
     }
+
 
 }

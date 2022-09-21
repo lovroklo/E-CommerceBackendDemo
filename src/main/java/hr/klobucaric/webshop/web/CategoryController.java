@@ -17,12 +17,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/category")
+@RequestMapping("/api/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CategoryDto> getCategoryById(@PathVariable final Long id){
         return new ResponseEntity<>(categoryService.findById(id), HttpStatus.OK);
     }

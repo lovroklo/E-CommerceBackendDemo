@@ -1,14 +1,16 @@
 package hr.klobucaric.webshop.user;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-@Data
+@AllArgsConstructor
+@Getter
 public class LoginCommand {
 
     @NotBlank(message = "Email must not be empty")
-    @Email
+    @Email()
     private String email;
 
     @NotBlank(message = "Password must not be empty")

@@ -1,6 +1,6 @@
 package hr.klobucaric.webshop.shoppingCartItem;
 
-import hr.klobucaric.webshop.product.productItem.ProductItem;
+import hr.klobucaric.webshop.productItem.ProductItem;
 import hr.klobucaric.webshop.shoppingCart.ShoppingCart;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,11 +21,11 @@ public class ShoppingCartItem {
 
     private Integer qty;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
     private ShoppingCart shoppingCart;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_item_id")
     private ProductItem productItem;
 

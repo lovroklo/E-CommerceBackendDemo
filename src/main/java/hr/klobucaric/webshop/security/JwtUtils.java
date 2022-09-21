@@ -39,6 +39,7 @@ public class JwtUtils {
     }
 
     public ResponseCookie getCleanJwtCookie() {
+        log.info("Returning clean jwt cookie because user wants to be logged out!");
         return ResponseCookie.from(jwtCookieName, "").maxAge(0).build();
     }
 

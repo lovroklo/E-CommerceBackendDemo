@@ -13,7 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/product")
+@RequestMapping("/api/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -23,7 +23,6 @@ public class ProductController {
                                                              @RequestParam(name = "n", defaultValue = "12")  Integer numberOfProducts,
                                                              @RequestParam(name = "ctg") Long categoryId) {
         Page<ProductDto> productPage;
-
         if(categoryId!=null){
             productPage =  productService.findByCategoryId(categoryId, pageNumber, numberOfProducts);
         } else{
@@ -34,7 +33,7 @@ public class ProductController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable final Long id) {
         return new ResponseEntity<>(productService.findById(id),HttpStatus.OK);
     }

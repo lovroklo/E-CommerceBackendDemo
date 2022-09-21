@@ -62,8 +62,6 @@ public class VariationOptionServiceImpl implements VariationOptionService{
         }
     }
 
-    //todo update i delete
-
     private VariationOptionDto mapVariationOptionToDto(VariationOption variationOption){
         return new VariationOptionDto(variationOption.getId(), variationOption.getVariation().getId(), variationOption.getValue());
     }

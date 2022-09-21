@@ -18,7 +18,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/address")
+@RequestMapping("/api/addresses")
 public class AddressController {
 
     private final AddressService addressService;

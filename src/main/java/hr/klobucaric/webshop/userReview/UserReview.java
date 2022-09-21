@@ -22,11 +22,11 @@ public class UserReview {
     private Integer ratingValue;
     private String comment;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ordered_product_id")
     private OrderLine orderedProduct;
 

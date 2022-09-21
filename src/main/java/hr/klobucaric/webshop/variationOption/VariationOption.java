@@ -1,6 +1,6 @@
 package hr.klobucaric.webshop.variationOption;
 
-import hr.klobucaric.webshop.product.productItem.ProductItem;
+import hr.klobucaric.webshop.productItem.ProductItem;
 import hr.klobucaric.webshop.variation.Variation;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,11 +23,11 @@ public class VariationOption {
 
     private String value;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "variation_id")
     private Variation variation;
 
     @ManyToMany(mappedBy = "variationOptions")
-    private Set<ProductItem> productItems = new HashSet<>();;
+    private Set<ProductItem> productItems = new HashSet<>();
 
 }
