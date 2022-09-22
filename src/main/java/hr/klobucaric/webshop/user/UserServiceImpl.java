@@ -81,6 +81,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private User mapCommandToUser(RegistrationCommand registrationCommand){
-        return new User(registrationCommand.getEmail(),registrationCommand.getPhoneNumber(), registrationCommand.getPassword());
+        return new User(registrationCommand.getEmail(),registrationCommand.getPhoneNumber(), registrationCommand.getPassword(), registrationCommand.getFirstName(),
+                registrationCommand.getLastName());
     }
 }
