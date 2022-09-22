@@ -29,6 +29,7 @@ An address is used when a user is ordering products.
 
 The idea is to also have different payment methods and payment types (still in early implementation)
 
+Tests haven't been implemented yet.
 
 <h3>Current database design</h3>
 
