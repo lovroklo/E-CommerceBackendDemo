@@ -36,11 +36,15 @@ public class User  {
 
     private String password;
 
+    private String firstName;
+
+    private String lastName;
+
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private Set<UserReview> userReviews = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    Set<UserAddress> userAddresses = new HashSet<>();
+    private Set<UserAddress> userAddresses = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<ShopOrder> shopOrders = new HashSet<>();
@@ -57,13 +61,14 @@ public class User  {
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "roles_id", referencedColumnName = "id")}
     )
-
     private Set<Role> roles = new HashSet<>();
 
-    public User(String email, String phoneNumber, String password) {
+    public User(String email, String phoneNumber, String password, String firstName, String lastName) {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     @Override
