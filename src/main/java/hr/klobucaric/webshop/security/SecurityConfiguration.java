@@ -46,13 +46,11 @@ public class SecurityConfiguration {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests()
-            //    .mvcMatchers(HttpMethod.GET,"/api/product/**", "/api/review/**").permitAll()
-                .mvcMatchers("/api/authenticate", "/api/register").anonymous()
+                .mvcMatchers("/api/authentications/authenticate", "/api/authentications/register").anonymous()
                 .mvcMatchers(HttpMethod.DELETE).hasRole("ADMIN")
-                .mvcMatchers(HttpMethod.PUT, "api/product/**").hasRole("ADMIN")
-                .mvcMatchers(HttpMethod.POST, "api/product/**").hasRole("ADMIN")
-                .mvcMatchers(HttpMethod.GET, "api/product/**").permitAll()
-                // .mvcMatchers(HttpMethod.POST, "api/review/**","api/cart/**","api/order/**").hasAnyRole()
+                .mvcMatchers(HttpMethod.PUT, "api/products/**").hasRole("ADMIN")
+                .mvcMatchers(HttpMethod.POST, "api/products").hasRole("ADMIN")
+                .mvcMatchers(HttpMethod.GET, "api/products/**").permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
