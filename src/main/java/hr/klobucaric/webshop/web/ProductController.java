@@ -21,7 +21,7 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<Map<String,Object>> getAllProducts(@RequestParam(name = "p", defaultValue = "0")  Integer pageNumber,
                                                              @RequestParam(name = "n", defaultValue = "12")  Integer numberOfProducts,
-                                                             @RequestParam(name = "ctg") Long categoryId) {
+                                                             @RequestParam(name = "ctg", required = false) Long categoryId) {
         Page<ProductDto> productPage;
         if(categoryId!=null){
             productPage =  productService.findByCategoryId(categoryId, pageNumber, numberOfProducts);
