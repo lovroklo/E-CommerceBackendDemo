@@ -1,6 +1,5 @@
 package hr.klobucaric.webshop.category;
 
-import hr.klobucaric.webshop.address.UserAddress;
 import hr.klobucaric.webshop.product.Product;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
