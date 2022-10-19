@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public CategoryDto findById(Long id) {
         try {
-            return categoryRepository.findCategoryDtoById(id);
+            return categoryRepository.findCategoryDtoById(id).get();
         } catch (IllegalArgumentException e) {
             throw new ApiBadRequestException("Given category id is null, please send some id to be searched." + e.getMessage());
         } catch (NoSuchElementException e){
@@ -60,6 +60,7 @@ public class CategoryServiceImpl implements CategoryService{
                                 "There is no parent category with id: "+ command.getParentCategoryId()));
                 category = new Category(command.getName(), parentCategory);
             }
+            category.setPath("");
             category = categoryRepository.save(category);
             if(categoryParentIdIsNull){
                 category.setPath(category.getId().toString());
@@ -85,8 +86,9 @@ public class CategoryServiceImpl implements CategoryService{
             throw new ApiBadRequestException("Category with id: "+ id + " can't be deleted unless all of its subcategories are deleted!");
         }
 
+        Category parentCategory = category.getParentCategory();
         category.getProducts().stream().forEach(product ->
-            product.setCategory(category.getParentCategory())
+            product.setCategory(parentCategory)
         );
 
         log.info("Successfully deleted category and changed id to parent category on every product that was a part of it");
@@ -95,7 +97,7 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     private CategoryDto mapCategoryToDto(Category category){
-        return new CategoryDto(category.getId(), category.getName());
+        return new CategoryDto(category.getId(), category.getName(), category.getPath());
     }
 
 
