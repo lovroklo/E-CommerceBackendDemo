@@ -23,4 +23,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @EntityGraph(attributePaths = {"parentCategory"})
     Optional<Category> findById(Long id);
 
+
 }
