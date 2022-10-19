@@ -16,7 +16,7 @@ import java.util.Objects;
 @Getter
 @Setter
 public class UserAddress implements Serializable {
- //todo dok bum proizvoda koristil koristiti trebam ove dve anotacije @CreationTimestamp @Temporal(TemporalType.TIMESTAMP)
+ //todo add later when using product - @CreationTimestamp @Temporal(TemporalType.TIMESTAMP)
     @EmbeddedId
     private UserAddressKey id;
 
