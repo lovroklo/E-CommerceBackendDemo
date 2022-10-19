@@ -20,11 +20,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
       """)
     List<CategoryDto> findCategoryDtosByParentCategoryIsNull();
 
-    @Query("""
-      UPDATE Product p set p.category
-      """)
-    void updateAllProductsToParentCategory(Long oldCategoryId, Long parentCategoryId);
-
     @EntityGraph(attributePaths = {"parentCategory"})
     Optional<Category> findById(Long id);
 
