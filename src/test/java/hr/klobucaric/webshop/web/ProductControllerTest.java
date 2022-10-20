@@ -62,7 +62,7 @@ public class ProductControllerTest {
 
     @Test
     @WithMockUser(authorities = "USER")
-    public void getAllProducts_when1Product_EmptyCollection() throws Exception {
+    public void getAllProducts_whenUserIsAuthenticated_200() throws Exception {
         ProductDto obj1 = new ProductDto(1L, "test", "test_desc", "test_image", "1");
         Pageable pageable = PageRequest.of(0, 12);
         Page<ProductDto> productDtos = new PageImpl<>(List.of(obj1), pageable, 0);

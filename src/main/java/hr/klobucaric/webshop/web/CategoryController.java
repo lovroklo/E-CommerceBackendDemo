@@ -37,4 +37,10 @@ public class CategoryController {
     public ResponseEntity<CategoryDto> save(@Valid @RequestBody final CategoryCommand categoryCommand){
         return new ResponseEntity<>(categoryService.save(categoryCommand),HttpStatus.CREATED);
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable final Long id){
+        categoryService.deleteById(id);
+    }
 }

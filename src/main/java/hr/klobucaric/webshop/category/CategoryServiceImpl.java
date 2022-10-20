@@ -4,6 +4,7 @@ import hr.klobucaric.webshop.utils.exception.ApiBadRequestException;
 import hr.klobucaric.webshop.utils.exception.ApiNoContentException;
 import hr.klobucaric.webshop.utils.exception.ApiNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService{
 
@@ -34,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public CategoryDto findById(Long id) {
         try {
-            return categoryRepository.findCategoryDtoById(id);
+            return categoryRepository.findCategoryDtoById(id).get();
         } catch (IllegalArgumentException e) {
             throw new ApiBadRequestException("Given category id is null, please send some id to be searched." + e.getMessage());
         } catch (NoSuchElementException e){
@@ -44,19 +46,14 @@ public class CategoryServiceImpl implements CategoryService{
         }
     }
 
-    //todo category level 0 can be deleted only if there are no products in it
-    //todo implement deleting subcategories, products then move to higher category
-
     @Transactional
     @Override
     public CategoryDto save(CategoryCommand command) {
         try {
             Category category;
-
-            if(command.getParentCategoryId()==null){
-                category = new Category();
-                category.setName(command.getName());
-                category.setParentCategory(null);
+            Boolean categoryParentIdIsNull = command.getParentCategoryId().equals(null);
+            if(categoryParentIdIsNull){
+                category = new Category(command.getName(),null);
             }else {
                 Category parentCategory = categoryRepository.findById(command.getParentCategoryId())
                         .orElseThrow(() -> new ApiBadRequestException(
@@ -64,23 +61,13 @@ public class CategoryServiceImpl implements CategoryService{
                 category = new Category(command.getName(), parentCategory);
             }
             category.setPath("");
-            Category tempCategory = category;
-            String path="";
-            while (true){
-                StringBuffer tempId = new StringBuffer(tempCategory.getId().toString());
-                if(tempCategory.getParentCategory()!=null) {
-                    path += tempId.reverse()+ ".";
-                    tempCategory=tempCategory.getParentCategory();
-                }
-                else {
-                    path += tempId.reverse();
-                    break;
-                }
+            category = categoryRepository.save(category);
+            if(categoryParentIdIsNull){
+                category.setPath(category.getId().toString());
+            }else {
+                category.setPath(category.getParentCategory().getPath()+"."+category.getId());
             }
-            StringBuffer sbr = new StringBuffer(path);
-            path = sbr.reverse().toString();
-            category.setPath(path);
-            return mapCategoryToDto(categoryRepository.save(category));
+            return mapCategoryToDto(category);
         }catch (IllegalArgumentException e) {
             throw new ApiBadRequestException("Given category is null." + e.getMessage());
         }catch (Exception e){
@@ -88,9 +75,45 @@ public class CategoryServiceImpl implements CategoryService{
         }
     }
 
-    private CategoryDto mapCategoryToDto(Category category){
-        return new CategoryDto(category.getId(), category.getName());
+    @Override
+    public void deleteById(Long id) {
+
+
+        CategoryDto categoryDto = categoryRepository.findCategoryDtoById(id).orElseThrow(
+                () -> new ApiNotFoundException("There is no category with id" + id)
+        );
+
+        if(categoryDto.path().equals(id.toString())) {
+            throw new ApiBadRequestException("Category with highest level can't be deleted!");
+        }else if (categoryRepository.categoryHasChildCategories(id)){
+            throw new ApiBadRequestException("Category with id: "+ id + " can't be deleted unless all of its subcategories are deleted!");
+        }
+
+        Long parentId = extractParentIdFromPath(categoryDto);
+        categoryRepository.setCategoryIdToParentCategoryIdOnProducts(id,parentId);
+
+        log.info("Successfully deleted category and changed id to parent category on every product that was a part of it");
+        categoryRepository.deleteById(id);
+
     }
 
+
+    private CategoryDto mapCategoryToDto(Category category){
+        return new CategoryDto(category.getId(), category.getName(), category.getPath());
+    }
+
+    private Long extractParentIdFromPath(CategoryDto categoryDto) {
+        StringBuilder path = new StringBuilder(categoryDto.path().replace("."+categoryDto.id(),""));
+        StringBuilder parentId = new StringBuilder();
+
+        for(int i = path.length()-1; i>=0; i--){
+            if (path.charAt(i)=='.')
+                break;
+            parentId.append(path.charAt(i));
+        }
+
+        parentId = parentId.reverse();
+        return Long.parseLong(parentId.toString());
+    }
 
 }
