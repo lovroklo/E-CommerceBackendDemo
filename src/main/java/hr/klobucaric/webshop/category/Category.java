@@ -30,9 +30,9 @@ public class Category {
     @JoinColumn(name = "parent_category_id")
     private Category parentCategory;
 
-    @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parentCategory")
     private Set<Category> childCategories = new HashSet<>();
-    //todo when deleting category automatically add product to closest parent category
+
     @OneToMany(mappedBy = "category")
     Set<Product> products = new HashSet<>();
 

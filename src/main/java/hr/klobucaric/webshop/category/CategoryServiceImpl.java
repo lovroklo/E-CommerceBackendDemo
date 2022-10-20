@@ -78,27 +78,42 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public void deleteById(Long id) {
 
-        Category category = categoryRepository.findById(id).orElseThrow(
+
+        CategoryDto categoryDto = categoryRepository.findCategoryDtoById(id).orElseThrow(
                 () -> new ApiNotFoundException("There is no category with id" + id)
         );
 
-        if (!category.getChildCategories().isEmpty()){
+        if(categoryDto.path().equals(id.toString())) {
+            throw new ApiBadRequestException("Category with highest level can't be deleted!");
+        }else if (categoryRepository.categoryHasChildCategories(id)){
             throw new ApiBadRequestException("Category with id: "+ id + " can't be deleted unless all of its subcategories are deleted!");
         }
 
-        Category parentCategory = category.getParentCategory();
-        category.getProducts().stream().forEach(product ->
-            product.setCategory(parentCategory)
-        );
+        Long parentId = extractParentIdFromPath(categoryDto);
+        categoryRepository.setCategoryIdToParentCategoryIdOnProducts(id,parentId);
 
         log.info("Successfully deleted category and changed id to parent category on every product that was a part of it");
         categoryRepository.deleteById(id);
 
     }
 
+
     private CategoryDto mapCategoryToDto(Category category){
         return new CategoryDto(category.getId(), category.getName(), category.getPath());
     }
 
+    private Long extractParentIdFromPath(CategoryDto categoryDto) {
+        StringBuilder path = new StringBuilder(categoryDto.path().replace("."+categoryDto.id(),""));
+        StringBuilder parentId = new StringBuilder();
+
+        for(int i = path.length()-1; i>=0; i--){
+            if (path.charAt(i)=='.')
+                break;
+            parentId.append(path.charAt(i));
+        }
+
+        parentId = parentId.reverse();
+        return Long.parseLong(parentId.toString());
+    }
 
 }
