@@ -18,24 +18,25 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class OrderLine {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
 
-    private Integer qty;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private Long id;
 
-    private BigDecimal price;
+	private Integer qty;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_item_id")
-    private ProductItem productItem;
+	private BigDecimal price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private ShopOrder shopOrder;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "product_item_id")
+	private ProductItem productItem;
 
-    @OneToMany(cascade = CascadeType.ALL,  mappedBy = "orderedProduct")
-    private Set<UserReview> userReviews = new HashSet<>();
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "order_id")
+	private ShopOrder shopOrder;
+
+	@OneToMany(cascade = CascadeType.ALL,  mappedBy = "orderedProduct")
+	private Set<UserReview> userReviews = new HashSet<>();
 
 }

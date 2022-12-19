@@ -12,21 +12,28 @@ import java.math.BigDecimal;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ShoppingCartServiceImpl implements ShoppingCartService{
+public class ShoppingCartServiceImpl implements ShoppingCartService {
 
-    private final ShoppingCartRepository shoppingCartRepository;
-    private final SecurityUtils securityUtils;
+	private final ShoppingCartRepository shoppingCartRepository;
+	private final SecurityUtils securityUtils;
 
-    @Override
-    public BigDecimal getTotalPrice(){
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUser_Email(securityUtils.getAuthenticatedUser().getName()).orElseThrow(
-                () -> new  ApiBadRequestException("There was something wrong while fetching shopping cart")
-        );
-        BigDecimal totalPrice = new BigDecimal(0);
-        shoppingCart.getShoppingCartItems().forEach(shoppingCartItem ->
-                totalPrice.add(shoppingCartItem.getProductItem().getPrice().multiply(new BigDecimal(shoppingCartItem.getQty())))
-        );
-        return totalPrice;
-    }
+	@Override
+	public BigDecimal getTotalPrice() {
+
+		ShoppingCart shoppingCart = shoppingCartRepository.findByUser_Email(
+				securityUtils.getAuthenticatedUser().getName()
+		).orElseThrow(
+				() -> new  ApiBadRequestException("There was something wrong while fetching shopping cart")
+		);
+
+		BigDecimal totalPrice = new BigDecimal(0);
+		shoppingCart.getShoppingCartItems().forEach(shoppingCartItem ->
+				totalPrice.add(
+						shoppingCartItem.getProductItem().getPrice().multiply(new BigDecimal(shoppingCartItem.getQty()))
+				)
+		);
+
+		return totalPrice;
+	}
 
 }

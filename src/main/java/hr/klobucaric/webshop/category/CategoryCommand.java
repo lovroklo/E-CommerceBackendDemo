@@ -10,10 +10,10 @@ import javax.validation.constraints.NotBlank;
 @Getter
 public class CategoryCommand {
 
-    @NotBlank
-    private String name;
+	@NotBlank
+	private String name;
 
-    private Long parentCategoryId;
+	private Long parentCategoryId;
 
 
 }

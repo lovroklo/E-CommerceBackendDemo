@@ -17,23 +17,24 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class PaymentMethod {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
 
-    private String provider;
-    private String accountNumber;
-    private Date expiryDate;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+	private String provider;
+	private String accountNumber;
+	private Date expiryDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_type_id")
-    private PaymentType paymentType;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 
-    @OneToMany(mappedBy = "paymentMethod", cascade = CascadeType.ALL)
-    private Set<ShopOrder> shopOrders;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "payment_type_id")
+	private PaymentType paymentType;
+
+	@OneToMany(mappedBy = "paymentMethod", cascade = CascadeType.ALL)
+	private Set<ShopOrder> shopOrders;
 }

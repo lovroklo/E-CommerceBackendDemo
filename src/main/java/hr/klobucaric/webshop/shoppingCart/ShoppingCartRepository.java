@@ -10,13 +10,14 @@ import java.util.Set;
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long> {
 
 
-    Optional<ShoppingCart> findByUser_Email(String name);
+	Optional<ShoppingCart> findByUser_Email(String name);
 
-    @Query("""
-      select s from ShoppingCartItem s
-      where s.shoppingCart.id = :id
+	@Query("""
+      SELECT s 
+      FROM ShoppingCartItem s
+      WHERE s.shoppingCart.id = :id
       """)
-    Set<ShoppingCartItem> findAllShopCartItemsDto(Long id);
+	Set<ShoppingCartItem> findAllShopCartItemsDto(Long id);
 
 
 }

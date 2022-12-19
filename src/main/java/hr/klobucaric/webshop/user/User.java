@@ -24,73 +24,72 @@ import java.util.Set;
 @Slf4j
 public class User  {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(unique = true,
-    name = "email_address")
-    private String email;
+	@Column(unique = true, name = "email_address")
+	private String email;
 
-    private String phoneNumber;
+	private String phoneNumber;
 
-    private String password;
+	private String password;
 
-    private String firstName;
+	private String firstName;
 
-    private String lastName;
+	private String lastName;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private Set<UserReview> userReviews = new HashSet<>();
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private Set<UserReview> userReviews = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<UserAddress> userAddresses = new HashSet<>();
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private Set<UserAddress> userAddresses = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<ShopOrder> shopOrders = new HashSet<>();
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private Set<ShopOrder> shopOrders = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<PaymentMethod> paymentMethod = new HashSet<>();
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private Set<PaymentMethod> paymentMethod = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<ShoppingCart> shoppingCarts;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private Set<ShoppingCart> shoppingCarts;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "roles_id", referencedColumnName = "id")}
-    )
-    private Set<Role> roles = new HashSet<>();
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "user_roles",
+			joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+			inverseJoinColumns = {@JoinColumn(name = "roles_id", referencedColumnName = "id")}
+	)
+	private Set<Role> roles = new HashSet<>();
 
-    public User(String email, String phoneNumber, String password, String firstName, String lastName) {
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
+	public User(String email, String phoneNumber, String password, String firstName, String lastName) {
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "User{" +
+				"id=" + id +
+				", email='" + email + '\'' +
+				", phoneNumber='" + phoneNumber + '\'' +
+				'}';
+	}
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        User user = (User) o;
-        return id != null && Objects.equals(id, user.id);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+		User user = (User) o;
+		return id != null && Objects.equals(id, user.id);
+	}
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return getClass().hashCode();
+	}
 }

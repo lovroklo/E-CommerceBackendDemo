@@ -20,17 +20,17 @@ import java.util.Set;
 @CrossOrigin(origins = "http://localhost:4200")
 public class ProductItemController {
 
-    private final ProductItemService productItemService;
+	private final ProductItemService productItemService;
 
-    @PostMapping
-    public ResponseEntity<ProductItemDto> save(@Valid @RequestBody final ProductItemCommand productItemCommand){
-        return new ResponseEntity<>(productItemService.save(productItemCommand), HttpStatus.CREATED);
-    }
+	@PostMapping
+	public ResponseEntity<ProductItemDto> save(@Valid @RequestBody final ProductItemCommand productItemCommand) {
+		return new ResponseEntity<>(productItemService.save(productItemCommand), HttpStatus.CREATED);
+	}
 
-    @GetMapping
-    public ResponseEntity<ProductItemDto> findByVariationOptions(@RequestParam(value = "productId") Long productId,
-                                                                 @RequestParam(value = "variationsId") Long... variationsIdStr){
-        Set<Long> variationOptionIdSet= new HashSet<>(Arrays.asList(variationsIdStr));
-        return new ResponseEntity<>(productItemService.findByVariationOptions(productId, variationOptionIdSet), HttpStatus.OK);
-    }
+	@GetMapping
+	public ResponseEntity<ProductItemDto> findByVariationOptions(@RequestParam(value = "productId") Long productId,
+	                                                             @RequestParam(value = "variationsId") Long... variationsIdStr) {
+		Set<Long> variationOptionIdSet= new HashSet<>(Arrays.asList(variationsIdStr));
+		return new ResponseEntity<>(productItemService.findByVariationOptions(productId, variationOptionIdSet), HttpStatus.OK);
+	}
 }

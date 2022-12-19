@@ -11,25 +11,25 @@ import javax.validation.constraints.Positive;
 @Getter
 public class AddressCommand {
 
-    @NotBlank
-    private String city;
+	@NotBlank
+	private String city;
 
-    @NotNull
-    @Positive(message = "Postal code must be a positive number")
-    private Integer postalCode;
+	@NotNull
+	@Positive(message = "Postal code must be a positive number")
+	private Integer postalCode;
 
-    @NotBlank
-    private String addressLine;
+	@NotBlank
+	private String addressLine;
 
-    @Positive(message = "Street number must be a positive number")
-    private Integer streetNumber;
+	@Positive(message = "Street number must be a positive number")
+	private Integer streetNumber;
 
 
-    private Boolean isDefault;
+	private Boolean isDefault;
 
-    public Boolean getIsDefault(){
-        if(this.isDefault==null)
-            return false;
-        else return this.isDefault;
-    }
+	public Boolean getIsDefault(){
+		if(this.isDefault==null)
+			return false;
+		else return this.isDefault;
+	}
 }

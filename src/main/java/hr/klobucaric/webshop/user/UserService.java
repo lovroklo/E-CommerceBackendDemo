@@ -4,7 +4,7 @@ import org.springframework.http.ResponseCookie;
 
 public interface UserService {
 
-    UserDto register(RegistrationCommand command);
-    ResponseCookie authenticate(LoginCommand command);
-    ResponseCookie logout();
+	UserDto register(RegistrationCommand command);
+	ResponseCookie authenticate(LoginCommand command);
+	ResponseCookie logout();
 }

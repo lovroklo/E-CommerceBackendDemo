@@ -7,17 +7,19 @@ import java.util.Set;
 
 public interface VariationOptionRepository extends JpaRepository<VariationOption, Long> {
 
-    @Query("""
-      select new hr.klobucaric.webshop.variationOption.VariationOptionDto(v.id, v.id, v.value) from VariationOption v
-      where v.variation.id = :id
+	@Query("""
+      SELECT NEW hr.klobucaric.webshop.variationOption.VariationOptionDto(v.id, v.id, v.value) 
+      FROM VariationOption v
+      WHERE v.variation.id = :id
     """)
-    Set<VariationOptionDto> findVariationDtoSetByVariationId(Long id);
+	Set<VariationOptionDto> findVariationDtoSetByVariationId(Long id);
 
-    @Query("""
-      select new hr.klobucaric.webshop.variationOption.VariationOptionDto(v.id, v.variation.id , v.value) from VariationOption v
-      where v.id = :id
+	@Query("""
+      SELECT NEW hr.klobucaric.webshop.variationOption.VariationOptionDto(v.id, v.variation.id , v.value) 
+      FROM VariationOption v
+      WHERE v.id = :id
     """)
-    VariationOptionDto findDtoById(Long id);
+	VariationOptionDto findDtoById(Long id);
 
-    Set<VariationOption> findAllByIdIn(Set<Long> id);
+	Set<VariationOption> findAllByIdIn(Set<Long> id);
 }

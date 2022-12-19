@@ -12,15 +12,15 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class UserReviewCommand {
 
-    @NotNull
-    private Long orderedProductId;
+	@NotNull
+	private Long orderedProductId;
 
-    @Min(1)
-    @Max(5)
-    @NotNull
-    private Integer ratingValue;
+	@Min(1)
+	@Max(5)
+	@NotNull
+	private Integer ratingValue;
 
-    @NotBlank
-    private String comment;
+	@NotBlank
+	private String comment;
 
 }

@@ -9,9 +9,12 @@ import java.util.Date;
 @Getter
 public class PaymentMethodCommand {
 
-    private Long paymentTypeId;
-    private String provider;
-    private String accountNumber;
-    private Date expiryDate;
+	private Long paymentTypeId;
+
+	private String provider;
+
+	private String accountNumber;
+
+	private Date expiryDate;
 
 }

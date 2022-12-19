@@ -16,14 +16,15 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class ShippingMethod {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
 
-    private String name;
-    private BigDecimal price;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private Long id;
 
-    @OneToMany(mappedBy = "shippingMethod", cascade = CascadeType.ALL)
-    private Set<ShopOrder> shopOrders = new HashSet<>();;
+	private String name;
+	private BigDecimal price;
+
+	@OneToMany(mappedBy = "shippingMethod", cascade = CascadeType.ALL)
+	private Set<ShopOrder> shopOrders = new HashSet<>();;
 }

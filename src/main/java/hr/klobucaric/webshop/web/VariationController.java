@@ -19,37 +19,37 @@ import java.util.Set;
 @RequestMapping("/api/variations")
 public class VariationController {
 
-    private final VariationService variationService;
-    private final VariationOptionService variationOptionService;
+	private final VariationService variationService;
+	private final VariationOptionService variationOptionService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<VariationDto> getVariationById(@PathVariable final Long id) {
-        return new ResponseEntity<>(variationService.findVariationById(id), HttpStatus.OK);
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<VariationDto> getVariationById(@PathVariable final Long id) {
+		return new ResponseEntity<>(variationService.findVariationById(id), HttpStatus.OK);
+	}
 
-    @GetMapping(value = "/categories/{id}")
-    public ResponseEntity<Set<VariationDto>> getAllVariationsByCategoryId(@PathVariable final Long id) {
-        return new ResponseEntity<>(variationService.findVariationsByCategoryId(id), HttpStatus.OK);
-    }
+	@GetMapping(value = "/categories/{id}")
+	public ResponseEntity<Set<VariationDto>> getAllVariationsByCategoryId(@PathVariable final Long id) {
+		return new ResponseEntity<>(variationService.findVariationsByCategoryId(id), HttpStatus.OK);
+	}
 
-    @GetMapping("-option/id/{id}")
-    public ResponseEntity<VariationOptionDto> getVariationOptionById(@PathVariable final Long id) {
-        return new ResponseEntity<>(variationOptionService.findVariationOptionById(id), HttpStatus.OK);
-    }
+	@GetMapping("-option/id/{id}")
+	public ResponseEntity<VariationOptionDto> getVariationOptionById(@PathVariable final Long id) {
+		return new ResponseEntity<>(variationOptionService.findVariationOptionById(id), HttpStatus.OK);
+	}
 
-    @GetMapping("-option/ctg/{id}")
-    public ResponseEntity<Set<VariationOptionDto>> getAllVariationOptionsByVariationId(@PathVariable final Long id) {
-        return new ResponseEntity<>(variationOptionService.findVariationOptionsByVariationId(id), HttpStatus.OK);
-    }
+	@GetMapping("-option/ctg/{id}")
+	public ResponseEntity<Set<VariationOptionDto>> getAllVariationOptionsByVariationId(@PathVariable final Long id) {
+		return new ResponseEntity<>(variationOptionService.findVariationOptionsByVariationId(id), HttpStatus.OK);
+	}
 
-    @PostMapping(value = "-option")
-    public ResponseEntity<VariationOptionDto> saveVariationOption(@Valid @RequestBody final VariationOptionCommand command){
-        return new ResponseEntity<>(variationOptionService.save(command),HttpStatus.CREATED);
-    }
+	@PostMapping(value = "-option")
+	public ResponseEntity<VariationOptionDto> saveVariationOption(@Valid @RequestBody final VariationOptionCommand command) {
+		return new ResponseEntity<>(variationOptionService.save(command),HttpStatus.CREATED);
+	}
 
-    @PostMapping
-    public ResponseEntity<VariationDto> saveVariation(@Valid @RequestBody final VariationCommand command){
-        return new ResponseEntity<>(variationService.save(command),HttpStatus.CREATED);
-    }
+	@PostMapping
+	public ResponseEntity<VariationDto> saveVariation(@Valid @RequestBody final VariationCommand command) {
+		return new ResponseEntity<>(variationService.save(command),HttpStatus.CREATED);
+	}
 
 }

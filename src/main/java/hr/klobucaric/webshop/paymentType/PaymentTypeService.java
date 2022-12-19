@@ -2,5 +2,5 @@ package hr.klobucaric.webshop.paymentType;
 
 
 public interface PaymentTypeService {
-    PaymentType save(PaymentType type);
+	PaymentType save(PaymentType type);
 }

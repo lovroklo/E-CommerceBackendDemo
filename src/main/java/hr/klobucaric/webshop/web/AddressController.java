@@ -21,13 +21,11 @@ import javax.validation.Valid;
 @RequestMapping("/api/addresses")
 public class AddressController {
 
-    private final AddressService addressService;
+	private final AddressService addressService;
 
-    @PostMapping
-    public ResponseEntity<AddressDto> createAddress(@Valid @RequestBody AddressCommand command) {
-
-        return new ResponseEntity<>(addressService.createAddress(command), HttpStatus.CREATED);
-
-    }
+	@PostMapping
+	public ResponseEntity<AddressDto> createAddress(@Valid @RequestBody AddressCommand command) {
+		return new ResponseEntity<>(addressService.createAddress(command), HttpStatus.CREATED);
+	}
 
 }

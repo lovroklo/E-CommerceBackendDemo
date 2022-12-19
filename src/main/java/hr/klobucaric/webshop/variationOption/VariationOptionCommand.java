@@ -10,10 +10,10 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class VariationOptionCommand {
 
-    @NotNull(message = "Variation id can't be null!")
-    private Long variationId;
+	@NotNull(message = "Variation id can't be null!")
+	private Long variationId;
 
-    @NotBlank(message = "Variation value can't be empty or null!")
-    private String value;
+	@NotBlank(message = "Variation value can't be empty or null!")
+	private String value;
 
 }

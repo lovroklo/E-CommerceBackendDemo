@@ -11,11 +11,11 @@ import javax.validation.constraints.Positive;
 @Getter
 public class ShoppingCartItemCommand {
 
-    @NotNull(message = "Quantity can't be null!")
-    @Positive(message = "Quantity has to be a positive number!")
-    private Integer qty;
+	@NotNull(message = "Quantity can't be null!")
+	@Positive(message = "Quantity has to be a positive number!")
+	private Integer qty;
 
-    @NotNull(message = "Product item id can't be null!")
-    private Long productItemId;
+	@NotNull(message = "Product item id can't be null!")
+	private Long productItemId;
 
 }

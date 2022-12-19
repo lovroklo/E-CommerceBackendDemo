@@ -7,5 +7,5 @@ import java.util.Date;
 import java.util.Set;
 
 public record ShopOrderDto(Long id, Date orderDate, BigDecimal orderTotal, Long userId, Long shippingAddressId,
-                           Long shippingMethodId, String orderStatus, Long paymentMethodId, Set<OrderLineDto> orderLineIds){
+                           Long shippingMethodId, String orderStatus, Long paymentMethodId, Set<OrderLineDto> orderLineIds) {
 }

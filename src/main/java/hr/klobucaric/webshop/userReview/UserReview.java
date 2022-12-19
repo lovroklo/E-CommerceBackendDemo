@@ -14,20 +14,20 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 public class UserReview {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private Long id;
 
-    private Integer ratingValue;
-    private String comment;
+	private Integer ratingValue;
+	private String comment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ordered_product_id")
-    private OrderLine orderedProduct;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ordered_product_id")
+	private OrderLine orderedProduct;
 
 }

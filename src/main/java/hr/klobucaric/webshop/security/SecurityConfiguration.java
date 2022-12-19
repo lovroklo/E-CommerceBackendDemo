@@ -21,40 +21,40 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class SecurityConfiguration {
 
 
-    private final AuthenticationEntryPoint unauthorizedHandler;
-    private final OncePerRequestFilter authTokenFilter;
+	private final AuthenticationEntryPoint unauthorizedHandler;
+	private final OncePerRequestFilter authTokenFilter;
 
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Bean
-    public AuthenticationManager authManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userDetailsService) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(bCryptPasswordEncoder)
-                .and()
-                .build();
-    }
+	@Bean
+	public AuthenticationManager authManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userDetailsService) throws Exception {
+		return http.getSharedObject(AuthenticationManagerBuilder.class)
+				.userDetailsService(userDetailsService)
+				.passwordEncoder(bCryptPasswordEncoder)
+				.and()
+				.build();
+	}
 
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().authorizeRequests()
-                .mvcMatchers("/api/authentications/authenticate", "/api/authentications/register").anonymous()
-                .mvcMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
-                .mvcMatchers(HttpMethod.PUT, "/api/products/**").hasRole("ADMIN")
-                .mvcMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN")
-                .mvcMatchers(HttpMethod.GET, "/api/products/**").permitAll()
-                .anyRequest().authenticated();
-        http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
-    }
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.cors().and().csrf().disable()
+				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and().authorizeRequests()
+				.mvcMatchers("/api/authentications/authenticate", "/api/authentications/register").anonymous()
+				.mvcMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
+				.mvcMatchers(HttpMethod.PUT, "/api/products/**").hasRole("ADMIN")
+				.mvcMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN")
+				.mvcMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+				.anyRequest().authenticated();
+		http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
+		return http.build();
+	}
 
 
 

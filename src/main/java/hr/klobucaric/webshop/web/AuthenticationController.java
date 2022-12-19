@@ -18,26 +18,26 @@ import javax.validation.Valid;
 @RequestMapping("/api/authentications")
 public class AuthenticationController {
 
-    private final UserService userService;
+	private final UserService userService;
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginCommand command) {
-        ResponseCookie jwtCookie = userService.authenticate(command);
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString()).body(jwtCookie);
+	@PostMapping("/authenticate")
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginCommand command) {
+		ResponseCookie jwtCookie = userService.authenticate(command);
+		return ResponseEntity.ok()
+				.header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+				.body(jwtCookie);
+	}
 
-    }
+	@PostMapping("/logout")
+	public ResponseEntity<String> logoutUser() {
+		return ResponseEntity.ok()
+				.header(HttpHeaders.SET_COOKIE, userService.logout().toString())
+				.body("You have been signed out!");
+	}
 
-    @PostMapping("/logout")
-    public ResponseEntity<String> logoutUser(){
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, userService.logout().toString())
-                .body("You have been signed out!");
-    }
-
-
-    @PostMapping("/register")
-    public ResponseEntity<UserDto> register(@Valid @RequestBody final RegistrationCommand registrationCommand) {
-        return new ResponseEntity<>(userService.register(registrationCommand), HttpStatus.CREATED);
-    }
-
+	@PostMapping("/register")
+	public ResponseEntity<UserDto> register(@Valid @RequestBody final RegistrationCommand registrationCommand) {
+		return new ResponseEntity<>(userService.register(registrationCommand), HttpStatus.CREATED);
+	}
 
 }

@@ -20,27 +20,27 @@ import java.util.List;
 @RequestMapping("/api/categories")
 public class CategoryController {
 
-    private final CategoryService categoryService;
+	private final CategoryService categoryService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable final Long id){
-        return new ResponseEntity<>(categoryService.findById(id), HttpStatus.OK);
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<CategoryDto> getCategoryById(@PathVariable final Long id){
+		return new ResponseEntity<>(categoryService.findById(id), HttpStatus.OK);
+	}
 
-    @GetMapping("/parent")
-    public ResponseEntity<List<CategoryDto>> getAllParentCategories(){
-        return new ResponseEntity<>(categoryService.findByParentCategoryIsNull(), HttpStatus.OK);
-    }
+	@GetMapping("/parent")
+	public ResponseEntity<List<CategoryDto>> getAllParentCategories(){
+		return new ResponseEntity<>(categoryService.findByParentCategoryIsNull(), HttpStatus.OK);
+	}
 
 
-    @PostMapping
-    public ResponseEntity<CategoryDto> save(@Valid @RequestBody final CategoryCommand categoryCommand){
-        return new ResponseEntity<>(categoryService.save(categoryCommand),HttpStatus.CREATED);
-    }
+	@PostMapping
+	public ResponseEntity<CategoryDto> save(@Valid @RequestBody final CategoryCommand categoryCommand){
+		return new ResponseEntity<>(categoryService.save(categoryCommand),HttpStatus.CREATED);
+	}
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable final Long id){
-        categoryService.deleteById(id);
-    }
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@DeleteMapping("/{id}")
+	public void delete(@PathVariable final Long id){
+		categoryService.deleteById(id);
+	}
 }

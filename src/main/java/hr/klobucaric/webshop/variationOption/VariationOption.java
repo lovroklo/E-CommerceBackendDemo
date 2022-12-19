@@ -16,18 +16,18 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class VariationOption {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private Long id;
 
-    private String value;
+	private String value;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "variation_id")
-    private Variation variation;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "variation_id")
+	private Variation variation;
 
-    @ManyToMany(mappedBy = "variationOptions")
-    private Set<ProductItem> productItems = new HashSet<>();
+	@ManyToMany(mappedBy = "variationOptions")
+	private Set<ProductItem> productItems = new HashSet<>();
 
 }

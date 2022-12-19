@@ -26,37 +26,38 @@ import java.util.Set;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class ShopOrder implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
 
-    @Column(name = "order_date", nullable = false, updatable = false)
-    @CreatedDate
-    private Date orderDate;
-    private BigDecimal orderTotal;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+	@Column(name = "order_date", nullable = false, updatable = false)
+	@CreatedDate
+	private Date orderDate;
+	private BigDecimal orderTotal;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shipping_address")
-    private Address shippingAddress;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shipping_method")
-    private ShippingMethod shippingMethod;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "shipping_address")
+	private Address shippingAddress;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "order_status")
-    private OrderStatus orderStatus;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "shipping_method")
+	private ShippingMethod shippingMethod;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_method_id")
-    private PaymentMethod paymentMethod;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "order_status")
+	private OrderStatus orderStatus;
 
-    @OneToMany(mappedBy = "shopOrder")
-    Set<OrderLine> orderLines = new HashSet<>();
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "payment_method_id")
+	private PaymentMethod paymentMethod;
+
+	@OneToMany(mappedBy = "shopOrder")
+	Set<OrderLine> orderLines = new HashSet<>();
 
 }

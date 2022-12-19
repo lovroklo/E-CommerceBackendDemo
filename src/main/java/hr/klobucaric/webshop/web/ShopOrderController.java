@@ -19,12 +19,12 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class ShopOrderController {
 
-    private final ShopOrderService shopOrderService;
+	private final ShopOrderService shopOrderService;
 
-    @PostMapping
-    public ResponseEntity<ShopOrderDto> saveOrder(@Valid @RequestBody final ShopOrderCommand command){
-        return new ResponseEntity<>(shopOrderService.placeOrder(command), HttpStatus.CREATED);
-    }
+	@PostMapping
+	public ResponseEntity<ShopOrderDto> saveOrder(@Valid @RequestBody final ShopOrderCommand command) {
+		return new ResponseEntity<>(shopOrderService.placeOrder(command), HttpStatus.CREATED);
+	}
 
 
 

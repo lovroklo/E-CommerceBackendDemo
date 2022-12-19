@@ -8,44 +8,65 @@ import java.util.Optional;
 
 public interface AddressRepository extends JpaRepository<Address, Long> {
 
-    Address save(Address address);
+	Address save(Address address);
 
-    @Query("""
-      select a.id from Address a
-      where  a.city=:city and  a.postalCode = :postalCode and a.addressLine = :addressLine and a.streetNumber = :streetNumber
+	@Query("""
+		SELECT a.id 
+		FROM Address a
+		WHERE (
+			a.city=:city 
+			AND a.postalCode = :postalCode 
+			AND a.addressLine = :addressLine 
+			AND a.streetNumber = :streetNumber
+		)
       """)
-    Long findExistingAddress(String city, Integer postalCode, String addressLine, Integer streetNumber);
+	Long findExistingAddress(String city, Integer postalCode, String addressLine, Integer streetNumber);
 
-    @Query("""
-      select count (a)>0 from Address a
-      where  a.id = :id
-      """)
-    Boolean addressExists(Long id);
+	@Query("""
+	SELECT COUNT (a)>0 
+	FROM Address a
+	WHERE  a.id = :id
+	""")
+	Boolean addressExists(Long id);
 
 
-    @Query("""
-      select count(a) > 0 FROM UserAddress a
-      where  a.address.id = :addressId and a.user.id = :userId
-      """)
-    Boolean userContainsAddress(Long userId, Long addressId);
+	@Query("""
+	SELECT COUNT (a) > 0 FROM UserAddress a
+	WHERE (
+		a.address.id = :addressId 
+		AND a.user.id = :userId
+	) 
+	""")
+	Boolean userContainsAddress(Long userId, Long addressId);
 
-    @Query("""
-      select count(a) > 0 FROM UserAddress a
-      where  a.address.id = :addressId and a.user.id = :userId  and a.isDefault=false 
-      """)
-    Boolean userContainsAddressAndIsDefaultIsFalse(Long userId, Long addressId);
+	@Query("""
+	SELECT COUNT (a) > 0 
+	FROM UserAddress a
+	WHERE (
+		a.address.id = :addressId 
+		AND a.user.id = :userId  
+		AND a.isDefault = FALSE 
 
-    @Modifying
-    @Query("""
-        update UserAddress u set  u.isDefault =  false 
-        where u.user.id = :userId
+	)
+	""")
+	Boolean userContainsAddressAndIsDefaultIsFalse(Long userId, Long addressId);
+
+	@Modifying
+	@Query("""
+        UPDATE UserAddress u 
+        SET u.isDefault =  false 
+        WHERE u.user.id = :userId
     """)
-    void removeDefaultAddress(Long userId);
+	void removeDefaultAddress(Long userId);
 
-    @Modifying
-    @Query("""
-        update UserAddress u set  u.isDefault =  true 
-        where u.user.id = :userId and u.address.id = :addressId
+	@Modifying
+	@Query("""
+        UPDATE UserAddress u 
+        SET  u.isDefault =  TRUE 
+        WHERE (
+            u.user.id = :userId 
+            AND u.address.id = :addressId
+        )
     """)
-    void setDefaultAddress(Long userId, Long addressId);
+	void setDefaultAddress(Long userId, Long addressId);
 }

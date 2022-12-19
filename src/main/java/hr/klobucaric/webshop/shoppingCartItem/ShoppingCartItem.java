@@ -14,19 +14,20 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 public class ShoppingCartItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
 
-    private Integer qty;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id")
-    private ShoppingCart shoppingCart;
+	private Integer qty;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_item_id")
-    private ProductItem productItem;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cart_id")
+	private ShoppingCart shoppingCart;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "product_item_id")
+	private ProductItem productItem;
 
 }

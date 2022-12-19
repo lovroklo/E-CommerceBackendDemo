@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SecurityUtils {
-    public Authentication getAuthenticatedUser(){
-        return SecurityContextHolder.getContext().getAuthentication();
-    }
+	public Authentication getAuthenticatedUser(){
+		return SecurityContextHolder.getContext().getAuthentication();
+	}
 }

@@ -17,53 +17,53 @@ import java.util.Set;
 @Setter
 public class Category {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private Long id;
 
-    private String name;
+	private String name;
 
-    private String path;
+	private String path;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_category_id")
-    private Category parentCategory;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "parent_category_id")
+	private Category parentCategory;
 
-    @OneToMany(mappedBy = "parentCategory")
-    private Set<Category> childCategories = new HashSet<>();
+	@OneToMany(mappedBy = "parentCategory")
+	private Set<Category> childCategories = new HashSet<>();
 
-    @OneToMany(mappedBy = "category")
-    Set<Product> products = new HashSet<>();
+	@OneToMany(mappedBy = "category")
+	Set<Product> products = new HashSet<>();
 
-    public Category(String name, Category category) {
-        this.name = name;
-        this.parentCategory = category;
-    }
+	public Category(String name, Category category) {
+		this.name = name;
+		this.parentCategory = category;
+	}
 
-    @Override
-    public String toString() {
-        return "Category{" +
-                "id=" + id +
-                ", name='" + name +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "Category{" +
+				"id=" + id +
+				", name='" + name +
+				'}';
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Category)) return false;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Category)) return false;
 
-        Category category = (Category) o;
+		Category category = (Category) o;
 
-        if (!Objects.equals(id, category.id)) return false;
-        return Objects.equals(name, category.name);
-    }
+		if (!Objects.equals(id, category.id)) return false;
+		return Objects.equals(name, category.name);
+	}
 
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        return result;
-    }
+	@Override
+	public int hashCode() {
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		return result;
+	}
 }

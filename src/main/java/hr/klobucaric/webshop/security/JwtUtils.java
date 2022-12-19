@@ -19,61 +19,60 @@ import org.springframework.web.util.WebUtils;
 @Component
 public class JwtUtils {
 
-    @Value("${security.authentication.jwt.base64-secret}")
-    private String jwtSecret;
-    @Value("${security.authentication.jwt.access-token-validity-seconds}")
-    private int jwtExpirationMs;
-    @Value("${security.authentication.jwt.cookie-name}")
-    private String jwtCookieName;
+	@Value("${security.authentication.jwt.base64-secret}")
+	private String jwtSecret;
+	@Value("${security.authentication.jwt.access-token-validity-seconds}")
+	private int jwtExpirationMs;
+	@Value("${security.authentication.jwt.cookie-name}")
+	private String jwtCookieName;
 
+	public String getJwtFromCookies(HttpServletRequest request) {
+		Cookie cookie = WebUtils.getCookie(request, jwtCookieName);
+		if (cookie != null) return cookie.getValue();
+		return null;
+	}
 
-    public String getJwtFromCookies(HttpServletRequest request) {
-        Cookie cookie = WebUtils.getCookie(request, jwtCookieName);
-        if (cookie != null) return cookie.getValue();
-        return null;
-    }
+	public ResponseCookie generateJwtCookie(UserDetails user) {
+		String jwt = createToken(user);
+		return ResponseCookie.from(jwtCookieName, jwt).maxAge(jwtExpirationMs/1000).httpOnly(true).build();
+	}
 
-    public ResponseCookie generateJwtCookie(UserDetails user) {
-        String jwt = createToken(user);
-        return ResponseCookie.from(jwtCookieName, jwt).maxAge(jwtExpirationMs/1000).httpOnly(true).build();
-    }
+	public ResponseCookie getCleanJwtCookie() {
+		log.info("Returning clean jwt cookie because user wants to be logged out!");
+		return ResponseCookie.from(jwtCookieName, "").maxAge(0).build();
+	}
 
-    public ResponseCookie getCleanJwtCookie() {
-        log.info("Returning clean jwt cookie because user wants to be logged out!");
-        return ResponseCookie.from(jwtCookieName, "").maxAge(0).build();
-    }
+	public String getUserNameFromJwtToken(String token) {
+		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+	}
 
-    public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
-    }
+	public boolean validateJwtToken(String authToken) {
+		try {
+			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+			return true;
+		} catch (SignatureException e) {
+			log.error("Invalid JWT signature: {}", e.getMessage());
+		} catch (MalformedJwtException e) {
+			log.error("Invalid JWT token: {}", e.getMessage());
+		} catch (ExpiredJwtException e) {
+			log.error("JWT token is expired: {}", e.getMessage());
+		} catch (UnsupportedJwtException e) {
+			log.error("JWT token is unsupported: {}", e.getMessage());
+		} catch (IllegalArgumentException e) {
+			log.error("JWT claims string is empty: {}", e.getMessage());
+		}
+		return false;
+	}
 
-    public boolean validateJwtToken(String authToken) {
-        try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
-            return true;
-        } catch (SignatureException e) {
-            log.error("Invalid JWT signature: {}", e.getMessage());
-        } catch (MalformedJwtException e) {
-            log.error("Invalid JWT token: {}", e.getMessage());
-        } catch (ExpiredJwtException e) {
-            log.error("JWT token is expired: {}", e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            log.error("JWT token is unsupported: {}", e.getMessage());
-        } catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty: {}", e.getMessage());
-        }
-        return false;
-    }
-
-    public String createToken(UserDetails userDetails) {
-        String authorities = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
-        return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .claim("auth", authorities)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact();
-    }
+	public String createToken(UserDetails userDetails) {
+		String authorities = userDetails.getAuthorities().stream()
+				.map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
+		return Jwts.builder()
+				.setSubject(userDetails.getUsername())
+				.claim("auth", authorities)
+				.setIssuedAt(new Date())
+				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+				.signWith(SignatureAlgorithm.HS512, jwtSecret)
+				.compact();
+	}
 }

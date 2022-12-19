@@ -11,31 +11,35 @@ import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    @Query("""
-      SELECT new hr.klobucaric.webshop.category.CategoryDto(c.id, c.name, c.path) FROM Category c
-      WHERE c.id=:id
+	@Query("""
+	SELECT new hr.klobucaric.webshop.category.CategoryDto(c.id, c.name, c.path) 
+	FROM Category c
+	WHERE c.id=:id
       """)
-    Optional<CategoryDto> findCategoryDtoById(@Param("id") Long id);
+	Optional<CategoryDto> findCategoryDtoById(@Param("id") Long id);
 
-    @Query("""
-      SELECT new hr.klobucaric.webshop.category.CategoryDto(c.id, c.name, c.path) FROM Category c
-      WHERE c.parentCategory is null
+	@Query("""
+	SELECT new hr.klobucaric.webshop.category.CategoryDto(c.id, c.name, c.path) 
+	FROM Category c
+	WHERE c.parentCategory IS NULL 
       """)
-    List<CategoryDto> findCategoryDtosByParentCategoryIsNull();
+	List<CategoryDto> findCategoryDtosByParentCategoryIsNull();
 
-    @Query("""
-    SELECT CASE WHEN count(c)>0 THEN true ELSE false END from Category c 
-    where c.parentCategory.id = :id
+	@Query("""
+	SELECT CASE 
+	WHEN COUNT (c)>0 THEN TRUE ELSE FALSE END 
+	FROM Category c 
+	WHERE c.parentCategory.id = :id
     """)
-    Boolean categoryHasChildCategories(@Param("id") Long id);
+	Boolean categoryHasChildCategories(@Param("id") Long id);
 
-    @Transactional
-    @Modifying
-    @Query(nativeQuery = true, value = " UPDATE product p set p.category_id = :categoryId where p.category_id = :id")
-    void setCategoryIdToParentCategoryIdOnProducts(@Param("id") Long id, @Param("categoryId") Long categoryId);
+	@Transactional
+	@Modifying
+	@Query(nativeQuery = true, value = "UPDATE product p set p.category_id = :categoryId where p.category_id = :id")
+	void setCategoryIdToParentCategoryIdOnProducts(@Param("id") Long id, @Param("categoryId") Long categoryId);
 
-    @EntityGraph(attributePaths = {"parentCategory"})
-    Optional<Category> findById(@Param("id") Long id);
+	@EntityGraph(attributePaths = {"parentCategory"})
+	Optional<Category> findById(@Param("id") Long id);
 
 
 }

@@ -7,8 +7,10 @@ import lombok.Getter;
 @Getter
 public class ShopOrderCommand {
 
-    private Long paymentMethodId;
-    private Long shippingAddressId;
-    private Long shippingMethodId;
+	private Long paymentMethodId;
+
+	private Long shippingAddressId;
+
+	private Long shippingMethodId;
 
 }

@@ -10,19 +10,19 @@ import javax.validation.constraints.NotBlank;
 @Getter
 public class RegistrationCommand {
 
-    @Email(message = "email must be valid!")
-    @NotBlank(message = "email must not be empty")
-    private String email;
+	@Email(message = "email must be valid!")
+	@NotBlank(message = "email must not be empty")
+	private String email;
 
-    @ValidPassword
-    private String password;
+	@ValidPassword
+	private String password;
 
-    @NotBlank(message = "Phone number must not be empty")
-    private String phoneNumber;
+	@NotBlank(message = "Phone number must not be empty")
+	private String phoneNumber;
 
-    @NotBlank(message = "First name can't be empty!")
-    private String firstName;
+	@NotBlank(message = "First name can't be empty!")
+	private String firstName;
 
-    @NotBlank(message = "Last name can't be empty!")
-    private String lastName;
+	@NotBlank(message = "Last name can't be empty!")
+	private String lastName;
 }
